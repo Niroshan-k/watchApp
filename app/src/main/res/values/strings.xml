@@ -1,0 +1,56 @@
+<resources>
+    <!-- Home Page -->
+    <string name="app_name">TestApp</string>
+    <string name="logo_content_description">Logo</string>
+    <string name="search_placeholder">Search</string>
+    <string name="watch_1"> Montblanc</string>
+    <string name="watch_2"> Hamilton </string>
+    <string name="watch_3">Rado</string>
+    <string name="watch_4"> Luminox </string>
+    <string name="watch_5">Mavado</string>
+    <string name="watch_6">Tissot</string>
+
+    <string name="watch_1_price">$299</string>
+    <string name="watch_2_price">$199</string>
+    <string name="watch_3_price">$159</string>
+    <string name="watch_4_price">$299</string>
+    <string name="watch_5_price">$199</string>
+    <string name="watch_6_price">$159</string>
+
+    <!-- Cart Page -->
+    <string name="cart_page_title">My Cart</string>
+    <string name="total_label">TOTAL:</string>
+    <string name="total_amount">$0.00</string>
+    <string name="checkout_button">Check-Out</string>
+    <string name="quantity_increase">+</string>
+    <string name="quantity_decrease">-</string>
+
+    <string name="favourite_items_title">Favourite Items</string>
+
+    <string name="item_price">%1$s</string>
+    <string name="remove_item_description">Remove</string>
+
+
+
+    <!-- Description Page -->
+    <string name="product_name">Tissot</string>
+    <string name="product_code">Product code: 1298</string>
+    <string name="product_description">
+        <![CDATA[PRODUCT DESCRIPTION\nA Tissot watch blends Swiss precision with timeless design, offering reliable craftsmanship, elegant aesthetics, and modern features—perfect for both everyday wear and special occasions.]]>
+    </string>
+    <string name="product_price">Price: $299</string>
+    <string name="quantity_label">Quantity:</string>
+    <string name="increase_quantity">Increase Quantity</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- Profile Page -->
+    <string name="profile_title">My Profile</string>
+    <string name="user_name">User</string>
+    <string name="user_email">user@gmail.com</string>
+    <string name="wallet_option">Wallet</string>
+    <string name="support_option">Support</string>
+    <string name="privacy_policy_option">Privacy Policy</string>
+    <string name="sign_out_option">Sign out</string>
+
+</resources>
