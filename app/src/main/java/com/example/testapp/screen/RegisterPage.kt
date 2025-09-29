@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
@@ -16,11 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.R
+import com.example.testapp.viewmodels.SignupViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterPage(navController: NavController) {
+fun RegisterPage(
+    navController: NavController,
+    signupViewModel: SignupViewModel = viewModel()
+) {
+    // State for text fields
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var passwordMismatchError by remember { mutableStateOf<String?>(null) }
+
+    val isLoading by signupViewModel.isLoading.collectAsState()
+    val errorMsg by signupViewModel.errorMsg.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,8 +54,8 @@ fun RegisterPage(navController: NavController) {
 
         // Name TextField
         TextField(
-            value = "",
-            onValueChange = {},
+            value = name,
+            onValueChange = { name = it },
             label = { Text("Name") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,8 +68,8 @@ fun RegisterPage(navController: NavController) {
 
         // Email TextField
         TextField(
-            value = "",
-            onValueChange = {},
+            value = email,
+            onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,13 +77,14 @@ fun RegisterPage(navController: NavController) {
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.White
             ),
-            leadingIcon = { Icon(painter = painterResource(id = R.drawable.ic_check), contentDescription = null) }
+            leadingIcon = { Icon(painter = painterResource(id = R.drawable.ic_check), contentDescription = null) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
 
         // Password TextField
         TextField(
-            value = "",
-            onValueChange = {},
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Password") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,8 +98,8 @@ fun RegisterPage(navController: NavController) {
 
         // Confirm Password TextField
         TextField(
-            value = "",
-            onValueChange = {},
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
             label = { Text("Confirm Password") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,15 +111,55 @@ fun RegisterPage(navController: NavController) {
             leadingIcon = { Icon(painter = painterResource(id = R.drawable.ic_visibility_off), contentDescription = null) }
         )
 
+        // Error message for password mismatch
+        passwordMismatchError?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        // Error message from Firebase
+        errorMsg?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
         // Register Button
         Button(
-            onClick = { navController.navigate("home") },
+            onClick = {
+                passwordMismatchError = null
+                if (password != confirmPassword) {
+                    passwordMismatchError = "Passwords do not match"
+                } else if (email.isNotBlank() && password.isNotBlank()) {
+                    signupViewModel.register(email, password) {
+                        // On success, navigate to login screen
+                        navController.navigate("login") {
+                            // Optional: pop up to prevent back navigation
+                            popUpTo("register") { inclusive = true }
+                        }
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.outline)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.outline),
+            enabled = !isLoading
         ) {
-            Text(text = "Register", color = Color.White)
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text(text = "Register", color = Color.White)
+            }
         }
 
         // Login Link
@@ -117,7 +173,7 @@ fun RegisterPage(navController: NavController) {
                 }
         )
 
-        // Social Media Icons
+        // Social Media Icons (for display only)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
