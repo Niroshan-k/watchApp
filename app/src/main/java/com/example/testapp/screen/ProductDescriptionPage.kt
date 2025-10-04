@@ -1,5 +1,7 @@
 package com.example.testapp.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +39,17 @@ fun ProductDescriptionPage(
     navController: NavController,
     watch: Watch // <-- Pass Watch object from navigation or state!
 ) {
+
+    val context = LocalContext.current
+    val shareText = """
+                    Check out this watch!
+                    Brand: ${watch.brand}
+                    Model: ${watch.model}
+                    Price: $${watch.price}
+                    Features: ${watch.features.joinToString(", ")}
+                    Description: ${watch.description}
+                    """.trimIndent()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -259,7 +273,13 @@ fun ProductDescriptionPage(
                 }
                 // Share
                 IconButton(
-                    onClick = { /* Share action */ },
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, shareText)
+                        }
+                        context.startActivity(Intent.createChooser(intent, "Share via"))
+                    },
                     modifier = Modifier
                         .background(Color(0xFFFDE8D8), CircleShape)
                         .size(52.dp)
@@ -269,6 +289,24 @@ fun ProductDescriptionPage(
                         contentDescription = "Share",
                         tint = Color(0xFF7B4B1A),
                         modifier = Modifier.size(32.dp)
+                    )
+                }
+                Button(
+                    onClick = { navController.navigate("contacts?message=${Uri.encode(shareText)}") },
+                    shape = RoundedCornerShape(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B4B1A)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(52.dp)
+                        .padding(horizontal = 18.dp)
+                ) {
+                    Text(
+                        text = "SHARE WITH CONTACT",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = dmSerifFont,
+                        fontSize = 18.sp,
+                        letterSpacing = 2.sp
                     )
                 }
             }

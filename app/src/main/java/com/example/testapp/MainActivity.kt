@@ -1,6 +1,7 @@
 package com.example.testapp
 
 import CartPage
+import ContactsScreen
 import HomePage
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +20,8 @@ import com.example.testapp.screen.*
 import com.example.testapp.ui.theme.TestAppTheme
 
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.testapp.viewmodel.WatchViewModel
 
 class MainActivity : ComponentActivity() {
@@ -44,6 +47,13 @@ class MainActivity : ComponentActivity() {
                         if (watch != null) {
                             ProductDescriptionPage(navController, watch)
                         }
+                    }
+                    composable(
+                        route = "contacts?message={message}",
+                        arguments = listOf(navArgument("message") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val message = backStackEntry.arguments?.getString("message") ?: ""
+                        ContactsScreen(navController, message)
                     }
                 }
             }
