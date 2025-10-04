@@ -121,6 +121,18 @@ fun ProductDescriptionPage(
                 color = Color.Gray,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
+            Spacer(Modifier.height(20.dp))
+
+            // Price
+            Text(
+                text = "$${watch.price}",
+                fontFamily = dmSerifFont,
+                fontWeight = FontWeight.Bold,
+                fontSize = 36.sp,
+                color = Color(0xFF7B4B1A),
+                modifier = Modifier
+                    .padding(10.dp)
+            )
 
             Spacer(Modifier.height(6.dp))
 
@@ -214,20 +226,6 @@ fun ProductDescriptionPage(
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
-
-            // Price
-            Text(
-                text = "$${watch.price}",
-                fontFamily = dmSerifFont,
-                fontWeight = FontWeight.Bold,
-                fontSize = 36.sp,
-                color = Color(0xFF7B4B1A),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(10.dp)
-            )
-
             Spacer(Modifier.height(16.dp))
 
             // Bottom actions
@@ -238,76 +236,52 @@ fun ProductDescriptionPage(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Bookmark
-                IconButton(
-                    onClick = { /* Save/bookmark */ },
-                    modifier = Modifier
-                        .background(Color(0xFFFDE8D8), CircleShape)
-                        .size(52.dp)
-                ) {
-                    Icon(
-                        Icons.Filled.ShoppingCart,
-                        contentDescription = "Bookmark",
-                        tint = Color(0xFF7B4B1A),
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
                 // Add to cart
-                Button(
-                    onClick = { /* Add to cart */ },
-                    shape = RoundedCornerShape(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B4B1A)),
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(52.dp)
-                        .padding(horizontal = 18.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "ADD TO CART",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = dmSerifFont,
-                        fontSize = 18.sp,
-                        letterSpacing = 2.sp
-                    )
-                }
-                // Share
-                IconButton(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, shareText)
-                        }
-                        context.startActivity(Intent.createChooser(intent, "Share via"))
-                    },
-                    modifier = Modifier
-                        .background(Color(0xFFFDE8D8), CircleShape)
-                        .size(52.dp)
-                ) {
-                    Icon(
-                        Icons.Filled.Share,
-                        contentDescription = "Share",
-                        tint = Color(0xFF7B4B1A),
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-                Button(
-                    onClick = { navController.navigate("contacts?message=${Uri.encode(shareText)}") },
-                    shape = RoundedCornerShape(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B4B1A)),
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(52.dp)
-                        .padding(horizontal = 18.dp)
-                ) {
-                    Text(
-                        text = "SHARE WITH CONTACT",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = dmSerifFont,
-                        fontSize = 18.sp,
-                        letterSpacing = 2.sp
-                    )
+                    // ADD TO CART button (wide, dark brown)
+                    Button(
+                        onClick = { /* Add to cart */ },
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B4B1A)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp)
+                    ) {
+                        Text(
+                            text = "ADD TO CART",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = dmSerifFont,
+                            fontSize = 18.sp,
+                            letterSpacing = 2.sp
+                        )
+                    }
+
+                    // Spacer between buttons
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    // Share button (circle, fixed size, height = width = 52.dp)
+                    Button(
+                        onClick = { navController.navigate("contacts?message=${Uri.encode(shareText)}") },
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B4B1A)),
+                        contentPadding = PaddingValues(0.dp),
+                        modifier = Modifier
+                            .size(52.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Share,
+                            contentDescription = "Share",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
             }
 
